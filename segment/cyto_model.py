@@ -56,7 +56,7 @@ def generate_model_results(img, diam, channels, outputnpy, model_type='cyto3', u
 
 if __name__=="__main__":
     files = os.listdir("../images_dummy/")
-    diameters = [30, 15, 10] # 
+    diameters = [30, 15, 20] 
     # modelslist = ["cyto3"]
 
     model_type = 'cyto3'
@@ -74,4 +74,4 @@ if __name__=="__main__":
             channels = [[0,0]]
             outputname = result + "_" + str(diam) + "_" + str(model_type)
 
-            generate_model_results(img, diam, channels, outputname, model_type=model_type, use_gpu=True, flow_threshold = 0.4, do_3D=False)
+            generate_model_results(img, diam, channels, outputname, model_type=model_type, use_gpu=True, flow_threshold = 1.0, do_3D=False)

@@ -10,7 +10,7 @@ sys.path.append("..")
 from utils.utils import extract_filename
 
 if __name__=="__main__":
-    output_ = ["_30_cyto3_seg.npy", "_15_cyto3_seg.npy", "_10_cyto3_seg.npy"]
+    output_ = ["_30_cyto3_seg.npy", "_15_cyto3_seg.npy", "_20_cyto3_seg.npy"]
     files = os.listdir("../images_dummy/")
     # output_filenames = []
     # for model_type in modelslist:
@@ -77,18 +77,18 @@ if __name__=="__main__":
         final_overlayed_image_tensor = torch.max(final_overlayed_image_tensor, green_mask_tensor)
 
         # Label each cluster 
-        labeled_clusters = label(mask2)
+        # labeled_clusters = label(mask2)
 
         final_overlayed_image_tensor = final_overlayed_image_tensor.cpu().numpy()
         final_overlayed_image_tensor = final_overlayed_image_tensor.astype(np.uint8)
 
         # Add labels to the clusters 
-        for region in regionprops(labeled_clusters): 
-            # Take the centroid of the region to place the label 
-            centroid = region.centroid 
-            cv2.putText(final_overlayed_image_tensor, str(region.label), (int(centroid[1]), int(centroid[0])), cv2.FONT_HERSHEY_SIMPLEX, 4, (255, 255, 255), 4, cv2.LINE_AA)
+        # for region in regionprops(labeled_clusters): 
+        #     # Take the centroid of the region to place the label 
+        #     centroid = region.centroid 
+        #     cv2.putText(final_overlayed_image_tensor, str(region.label), (int(centroid[1]), int(centroid[0])), cv2.FONT_HERSHEY_SIMPLEX, 4, (255, 255, 255), 4, cv2.LINE_AA)
     
-        # Save the output image
+        # # Save the output image
         cv2.imwrite(result + '_overlayed_image.jpg', final_overlayed_image_tensor)
 
         print("Overlay completed and saved as overlayed_image.jpg")
