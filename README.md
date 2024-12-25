@@ -8,5 +8,8 @@ Code
 Create conda environment
 - We use python 3.10 as described in the Github repo of cellpose
 >> conda create -n cellpose python=3.10 anaconda
->> python -m pip install cellpose --upgrade
+- Once the environment is setup, activate it
+>> conda activate cellpose 
+>> pip install -r requirements.txt
+
 
