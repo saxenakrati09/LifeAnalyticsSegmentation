@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from cellpose import models, io
 from cellpose.io import imread
 import skimage
-import os
+import os, torch
 from icecream import ic
 import sys
 sys.path.append("..")
@@ -36,7 +36,7 @@ def generate_model_results(img, diam, channels, outputnpy, model_type='cyto3', u
         Whether to do 3D segmentation (default is False).
     """
 
-    model = models.Cellpose(model_type=model_type, gpu=use_gpu)
+    model = models.Cellpose(model_type=model_type, gpu=use_gpu, device=torch.device("cuda:1"))
     masks1, flows1, styles1, diams1 = model.eval(img, diameter=diam, channels=channels, flow_threshold=flow_threshold, do_3D=False)
     # Flip the image horizontally 
     image_flipped = np.fliplr(img)
@@ -55,8 +55,8 @@ def generate_model_results(img, diam, channels, outputnpy, model_type='cyto3', u
     # io.save_masks(img, merged_masks, merged_flows, pngoutput, png=True)
 
 if __name__=="__main__":
-    files = os.listdir("../images_dummy/")
-    diameters = [30, 15, 20] 
+    files = os.listdir("../images/")
+    diameters = [15, 20, 30] 
     # modelslist = ["cyto3"]
 
     model_type = 'cyto3'
@@ -66,7 +66,7 @@ if __name__=="__main__":
         
             ic(f"Processing file {file} with model {model_type} and diameter {diam}")
             # Add your processing code here
-            path = os.path.join('../images_dummy/', file) 
+            path = os.path.join('../images/', file) 
             img = io.imread(path)
 
             result = extract_filename(path)
@@ -74,4 +74,4 @@ if __name__=="__main__":
             channels = [[0,0]]
             outputname = result + "_" + str(diam) + "_" + str(model_type)
 
-            generate_model_results(img, diam, channels, outputname, model_type=model_type, use_gpu=True, flow_threshold = 1.0, do_3D=False)
+            generate_model_results(img, diam, channels, outputname, model_type=model_type, use_gpu=True, flow_threshold = 0.6, do_3D=False)

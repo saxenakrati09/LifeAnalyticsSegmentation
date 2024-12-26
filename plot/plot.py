@@ -11,12 +11,12 @@ from utils.utils import extract_filename
 
 if __name__=="__main__":
     output_ = ["_30_cyto3_seg.npy", "_15_cyto3_seg.npy", "_20_cyto3_seg.npy"]
-    files = os.listdir("../images_dummy/")
+    files = os.listdir("../images/")
     # output_filenames = []
     # for model_type in modelslist:
     for file in files:
         # Add your processing code here
-        path = os.path.join('../images_dummy/', file) 
+        path = os.path.join('../images/', file) 
         image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)  # Load as grayscale
 
         result = extract_filename(path)
