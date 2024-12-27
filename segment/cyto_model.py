@@ -5,6 +5,7 @@ from cellpose.io import imread
 import skimage
 import os, torch
 from icecream import ic
+import gc
 import sys
 sys.path.append("..")
 from utils.utils import extract_filename
@@ -53,7 +54,15 @@ def generate_model_results(img, diam, channels, outputnpy, model_type='cyto3', u
 
     io.masks_flows_to_seg(img, merged_masks, merged_flows, outputnpy, channels=channels, diams=diam)
     # io.save_masks(img, merged_masks, merged_flows, pngoutput, png=True)
-
+    # Free up GPU memory 
+    torch.cuda.empty_cache() 
+    # Run garbage collection 
+    gc.collect() 
+    # Clean up variables 
+    del masks1, flows1, styles1, diams1, masks2, flows2, styles2, diams2, merged_masks, flows2_flipped, merged_flows 
+    torch.cuda.empty_cache() 
+    gc.collect()
+    
 if __name__=="__main__":
     files = os.listdir("../images/")
     diameters = [15, 20, 30] 
@@ -73,5 +82,7 @@ if __name__=="__main__":
 
             channels = [[0,0]]
             outputname = result + "_" + str(diam) + "_" + str(model_type)
-
-            generate_model_results(img, diam, channels, outputname, model_type=model_type, use_gpu=True, flow_threshold = 0.6, do_3D=False)
+            try: # gpu memory error due to limited memory
+                generate_model_results(img, diam, channels, outputname, model_type=model_type, use_gpu=True, flow_threshold = 0.6, do_3D=False)
+            except:
+                pass
